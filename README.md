@@ -1,5 +1,8 @@
 # CASA0018 - Blink - Animatronic Eye & Machine Learning
 
+<img width="632" height="438" alt="Screenshot 2026-05-04 at 10 57 30" src="https://github.com/user-attachments/assets/5b751bd3-26f9-476a-999f-381c8032e702" />
+
+
 BLINK is a cap-mounted eye tracking system that uses deep learning to detect eye movement and control an animatronic eye in real time.
 An OV7675 camera module wired to an ESP32-S3 Feather captures a live feed of the wearer's eye and runs inference using a
 TensorFlow Lite model on the device. When a blink is detected, the prediction is sent over WiFi UDP to a Feather M0 WiFi,
@@ -9,7 +12,10 @@ using the performer's own physiological data as input rather than removing them 
 Edge Impulse project: https://studio.edgeimpulse.com/studio/973156
 VIDEO: https://youtu.be/RPCHt_jFTuw
 
-** How to Replicate: **
+<img width="867" height="600" alt="Screenshot 2026-05-04 at 17 37 08" src="https://github.com/user-attachments/assets/c5e4cc55-aa75-456d-9d1b-166a41f87a70" />
+
+
+**How to Replicate:**
 
 Hardware required: Adafruit Feather ESP32-S3, Adafruit Feather M0 WiFi, OV7675 camera module, 
 servo motor, and a 3D printed animatronic eye mechanism built following Morgan Manly's single eye workshop on Instructables.
@@ -30,10 +36,16 @@ In ei_classifier_porting.cpp, replace the ei_malloc and ei_calloc functions with
 In ei_classifier_config.h, disable ESP-NN hardware acceleration. These edits are required every time a new library version is exported. 
 Set the camera clock to 10MHz to bring inference below 1 second per frame.
 
-** Conclusion ** 
+**Conclusion** 
 
 BLINK demonstrates that real-time eye tracking inference is achievable on an embedded microcontroller and can be used to drive a physical animatronic output over WiFi. 
 Blink detection works reliably when the camera is correctly positioned, though left/right classification remains limited by resolution and dataset size. 
 The OV7675 and ESP32-S3 combination caused significant compatibility issues throughout, and a different camera module such as the OV2640 would be the first thing to change in a future iteration. 
 Most importantly, the project points toward a way of using AI in performance and making, one where the technology responds to and amplifies the performer rather than replacing them.
+
+**Bibliography**
+
+Costescu, C. (2023). Eye Tracking, Animatronic Fursuit Head Base. YouTube. https://www.youtube.com/watch?v=xfGlPQP8tPY
+
+MorganManly. (no date). Animatronic Eyes (Double and Single, 3D Printed, Compact, With Arduino). Instructables. https://www.instructables.com/member/MorganManly/
 
