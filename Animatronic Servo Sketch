@@ -1,0 +1,63 @@
+#include <SPI.h>
+#include <WiFi101.h>
+#include <WiFiUdp.h>
+#include <Servo.h>
+
+const char* ssid = "";
+const char* password = "";
+
+WiFiUDP udp;
+Servo eyeServo;
+
+const int SERVO_PIN = 9;
+const int SERVO_OPEN = 90;
+const int SERVO_CLOSED = 135;
+const int UDP_PORT = 8888;
+
+void setup() {
+  Serial.begin(115200);
+  delay(3000);
+
+  eyeServo.attach(SERVO_PIN);
+  eyeServo.write(SERVO_OPEN);
+  Serial.println("Servo at open position");
+
+  WiFi.setPins(8, 7, 4, 2);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting");
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && attempts < 40) {
+    delay(500);
+    Serial.print(".");
+    attempts++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println();
+    Serial.print("Connected! IP: ");
+    Serial.println(WiFi.localIP());
+    udp.begin(UDP_PORT);
+    Serial.println("UDP listening on port 8888");
+  } else {
+    Serial.println();
+    Serial.println("WiFi failed to connect");
+  }
+}
+
+void loop() {
+  int packetSize = udp.parsePacket();
+  if (packetSize) {
+    char buf[32];
+    int len = udp.read(buf, sizeof(buf) - 1);
+    buf[len] = '\0';
+    String msg = String(buf);
+    Serial.print("Received: ");
+    Serial.println(msg);
+
+    if (msg == "blink") {
+      eyeServo.write(SERVO_CLOSED);
+    } else if (msg == "open" || msg == "left" || msg == "right") {
+      eyeServo.write(SERVO_OPEN);
+    }
+  }
+}
